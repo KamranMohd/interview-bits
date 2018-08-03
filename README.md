@@ -19,20 +19,14 @@ Contains code for of different topics from interviewbits. Below is the list of m
 
 ### Backtracking
 
-
 ### Hashing
-
 
 ### Heaps and maps
 
-
 ### Trees
-
 
 ### Dynamic Programming
 
-
 ### Greedy algorithm
-
 
 ### Graphs
