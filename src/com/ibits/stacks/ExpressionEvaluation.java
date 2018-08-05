@@ -1,14 +1,16 @@
 package com.ibits.stacks;
-
+/*
+ * https://www.geeksforgeeks.org/expression-evaluation/
+ */
 import java.util.Stack;
 
 public class ExpressionEvaluation {
 
 	public static void main(String[] args) {
-		String expression = "10 + 2 * 6";
-		// String expression = "100 * 2 + 12";
-		// String expression = "100 * ( 2 + 12 )";
-		// String expression = "100 * ( 2 + 12 ) / 14";
+		//String expression = "10 + 2 * 6";
+		//String expression = "100 * 2 + 12";
+		String expression = "100 * ( 2 + 12 )";
+		//String expression = "100 * ( 2 + 12 ) / 14";
 		String expTokens[] = expression.split(" ");
 		
 		System.out.println(getExpressionValue(expTokens));
@@ -24,7 +26,6 @@ public class ExpressionEvaluation {
 
 		for (int i = 0; i < n; i++) {
 			String ch = exp[i];
-			System.out.println(ch);
 			// If the current character is a value, push it on the value stack
 			if (isValue(ch))
 				val.push(Integer.parseInt(ch));
@@ -33,11 +34,11 @@ public class ExpressionEvaluation {
 				ops.push(ch);
 			// If right parenthesis, then pop until the left operator is not encountered
 			else if (isClosedParentheses(ch)) {
-				while (!ops.isEmpty() && !isClosedParentheses(ops.peek())) {
+				while (!ops.isEmpty() && !isOpenParentheses(ops.peek())) {
 					String op = ops.pop();
 					int val1 = val.pop();
 					int val2 = val.pop();
-					val.push(evaluateExpression(val1, val2, op));
+					val.push(evaluateExpression(val2, val1, op));
 				}
 				if (!ops.isEmpty())
 					ops.pop();
@@ -49,7 +50,7 @@ public class ExpressionEvaluation {
 					String op = ops.pop();
 					int val1 = val.pop();
 					int val2 = val.pop();
-					val.push(evaluateExpression(val1, val2, op));
+					val.push(evaluateExpression(val2, val1, op));
 				}
 				ops.push(ch);
 			}
@@ -60,13 +61,12 @@ public class ExpressionEvaluation {
 			int val1 = val.pop();
 			int val2 = val.pop();
 			String op = ops.pop();
-			val.push(evaluateExpression(val1, val2, op));
+			val.push(evaluateExpression(val2, val1, op));
 		}
 		return val.pop();
 	}
 
 	private static int evaluateExpression(int val1, int val2, String op) {
-		System.out.println(val1 + " " + val2 + " " + op);
 		if (op.equals("*"))
 			return val1 * val2;
 		if (op.equals("/"))
@@ -77,11 +77,12 @@ public class ExpressionEvaluation {
 	}
 
 	public static boolean hasPrecedence(String ch1, String ch2) {
-		if ((ch1.equals("*") || ch1.equals("/")) && (!ch2.equals("*") && !ch2.equals("/")))
-			return false;
-		else if ((ch1.equals("+") || ch1.equals("-")) && (!ch2.equals("+") && !ch2.equals("-")))
-			return false;
-		return true;
+		if (ch1.equals("*") || ch1.equals("/"))
+			return true;
+		else if ((ch1.equals("+") || ch1.equals("-")) && (ch2.equals("+") || ch2.equals("-")))
+			return true;
+		System.out.println("returning true : " + ch1 + " " + ch2);
+		return false;
 	}
 
 	public static boolean isValue(String ch) {
